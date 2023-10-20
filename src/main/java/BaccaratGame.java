@@ -4,15 +4,25 @@ import javafx.animation.RotateTransition;
 import javafx.animation.SequentialTransition;
 import javafx.application.Application;
 
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class BaccaratGame extends Application {
@@ -37,33 +47,23 @@ public class BaccaratGame extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
 		primaryStage.setTitle("Welcome to JavaFX");
-		
-		 Rectangle rect = new Rectangle (100, 40, 100, 100);
-	     rect.setArcHeight(50);
-	     rect.setArcWidth(50);
-	     rect.setFill(Color.VIOLET);
 
-	     RotateTransition rt = new RotateTransition(Duration.millis(5000), rect);
-	     rt.setByAngle(270);
-	     rt.setCycleCount(4);
-	     rt.setAutoReverse(true);
-	     SequentialTransition seqTransition = new SequentialTransition (
-	         new PauseTransition(Duration.millis(500)),
-	         rt
-	     );
-	     seqTransition.play();
-	     
-	     FadeTransition ft = new FadeTransition(Duration.millis(5000), rect);
-	     ft.setFromValue(1.0);
-	     ft.setToValue(0.3);
-	     ft.setCycleCount(4);
-	     ft.setAutoReverse(true);
 
-	     ft.play();
-	     BorderPane root = new BorderPane();
-	     root.setCenter(rect);
-	     
-	     Scene scene = new Scene(root, 700,700);
+
+		Text t1= new Text("Baccarat");
+		 Button b1= new Button("Play Game");
+		 t1.setId("t1");
+		 VBox homeBox= new VBox(t1, b1);
+		 homeBox.setSpacing(150);
+		 homeBox.setAlignment(Pos.CENTER);
+		 homeBox.setId("homeBox");
+		 homeBox.setMaxHeight(500);
+		 homeBox.setMaxWidth(500);
+		 BorderPane root = new BorderPane();
+		 root.setCenter(homeBox);
+		Scene scene = new Scene(root, 700,700);
+		String css = Objects.requireNonNull(this.getClass().getResource("/assets/style.css")).toExternalForm();
+		scene.getStylesheets().add(css);
 			primaryStage.setScene(scene);
 			primaryStage.show();
 

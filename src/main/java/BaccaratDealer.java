@@ -19,7 +19,7 @@ public class BaccaratDealer {
 
     }
     public int deckSize(){
-        return 0;
+        return deck.size();
     }
 
 }

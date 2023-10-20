@@ -1,0 +1,7 @@
+#homeBox{
+    -fx-background-color:RED;
+}
+#t1{
+    -fx-font-family: "Times New Roman", Times, serif;
+    -fx-font-size: 100;
+}
