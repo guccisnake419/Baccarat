@@ -5,6 +5,7 @@ import javafx.animation.SequentialTransition;
 import javafx.application.Application;
 
 import javafx.application.Platform;
+import javafx.css.PseudoClass;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -38,12 +39,11 @@ public class BaccaratGame extends Application {
 
 	HashMap<String, Scene> sceneMap= new HashMap<>();
 	Scene scene;
-	Button b1;
-	Button exit;
-	Button freshStart;
-	String css;
 
-	Button options;
+	String css;
+	PseudoClass cChips= PseudoClass.getPseudoClass("chips"), playButtons= PseudoClass.getPseudoClass("playButtons");;
+
+	Button chip_100K, chip_50K, chip_40K, chip_20K, chip_10K, options, b1, exit, freshStart, reBet, clearBet, deal;
 	Text score;
 	Stage primaryStage;
 	public double evaluateWinnings(){
@@ -89,6 +89,7 @@ public class BaccaratGame extends Application {
 		homeBox.setMaxWidth(500);
 		BorderPane root = new BorderPane();
 		root.setCenter(homeBox);
+		root.setId("root");
 		return new Scene(root, 1200,700);
 
 	}
@@ -104,8 +105,21 @@ public class BaccaratGame extends Application {
 		BorderPane header = new BorderPane();
 		header.setLeft(score);
 		header.setRight(options);
+		BorderPane body= new BorderPane();
+		//Vbox for stage is a temp placeholder
+		VBox chips= new VBox(), stage= new VBox(), controls= new VBox();
+		body.setLeft(chips);
+		body.setCenter(stage);
+		body.setRight(controls);
+		initializeChips();
+		initializeControls();
+		controls.getChildren().setAll(reBet, clearBet, deal);
+		controls.setSpacing(100);
+		chips.setSpacing(30);
+		chips.getChildren().addAll(chip_100K,chip_50K, chip_40K, chip_20K, chip_10K);
 
-		VBox gameBox= new VBox(header);
+		VBox gameBox= new VBox(header, body);
+		gameBox.setId("gameBox");
 		return new Scene(gameBox, 1200, 700);
 	}
 	public Scene createOptionPage(){
@@ -125,5 +139,30 @@ public class BaccaratGame extends Application {
 		gameBox.setCenter(homeBox);
 		return new Scene(gameBox, 1200, 700);
 	}
+	public void initializeChips(){
+		chip_100K= new Button("100K");
+		chip_50K= new Button("50K");
+		chip_40K= new Button("40K");
+		chip_20K= new Button("20K");
+		chip_10K= new Button("10K");
+		chip_100K.setId("chip_100K");
+		chip_50K.setId("chip_50K");
+		chip_40K.setId("chip_40K");
+		chip_20K.setId("chip_20K");
+		chip_10K.setId("chip_10K");
+		chip_100K.pseudoClassStateChanged(cChips, true);
+		chip_50K.pseudoClassStateChanged(cChips, true);
+		chip_40K.pseudoClassStateChanged(cChips, true);
+		chip_20K.pseudoClassStateChanged(cChips, true);
+		chip_10K.pseudoClassStateChanged(cChips, true);
 
+	}
+	public void initializeControls(){
+		reBet= new Button("REBET");
+		clearBet= new Button("CLEAR BET");
+		deal = new Button("DEAL");
+		reBet.pseudoClassStateChanged(playButtons, true);
+		clearBet.pseudoClassStateChanged(playButtons, true);
+		deal.pseudoClassStateChanged(playButtons, true);
+	}
 }

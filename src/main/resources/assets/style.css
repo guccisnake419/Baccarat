@@ -9,3 +9,24 @@
 
 
 }
+#gameBox{
+    -fx-background-color:GREEN;
+}
+#root{
+    -fx-background-image: url("images/baccarattable.jpeg");
+    -fx-background-size: cover;
+}
+.button:chips{
+    -fx-background-radius: 5em;
+    -fx-min-width: 75px;
+    -fx-min-height: 75px;
+    -fx-max-width: 75px;
+    -fx-max-height: 75px;
+}
+.button:playButtons{
+    -fx-background-radius: 5em;
+    -fx-min-width: 130px;
+    -fx-min-height: 130px;
+    -fx-max-width: 130px;
+    -fx-max-height: 130px;
+}
