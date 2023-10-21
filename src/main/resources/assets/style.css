@@ -10,13 +10,15 @@
 
 }
 #gameBox{
-    -fx-background-color:GREEN;
+    -fx-background-color:#355E3B;
 }
 #root{
     -fx-background-image: url("images/baccarattable.jpeg");
     -fx-background-size: cover;
 }
 .button:chips{
+    -fx-text-fill: WHITE;
+    -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.7) , 5, 0.0 , 3, 3 );
     -fx-background-radius: 5em;
     -fx-min-width: 75px;
     -fx-min-height: 75px;
@@ -24,9 +26,43 @@
     -fx-max-height: 75px;
 }
 .button:playButtons{
+    -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.7) , 5, 0.0 , 3, 3 );
+    -fx-text-fill: WHITE;
     -fx-background-radius: 5em;
     -fx-min-width: 130px;
     -fx-min-height: 130px;
     -fx-max-width: 130px;
     -fx-max-height: 130px;
+}
+#rebet{
+    -fx-background-color: BLUE;
+
+}
+#clearBet{
+    -fx-background-color: RED ;
+
+}
+#deal{
+    -fx-background-color: #7CFC00;
+
+}
+#chip_100K{
+    -fx-background-image: url("images/chips/black.png");
+    -fx-background-size: cover;
+}
+#chip_50K{
+    -fx-background-image: url("images/chips/green.png");
+    -fx-background-size: cover;
+}
+#chip_40K{
+    -fx-background-image: url("images/chips/blue.png");
+    -fx-background-size: cover;
+}
+#chip_20K{
+    -fx-background-image: url("images/chips/purple.png");
+    -fx-background-size: cover;
+}
+#chip_10K{
+    -fx-background-image: url("images/chips/red.png");
+    -fx-background-size: cover;
 }

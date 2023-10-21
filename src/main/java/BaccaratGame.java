@@ -161,6 +161,9 @@ public class BaccaratGame extends Application {
 		reBet= new Button("REBET");
 		clearBet= new Button("CLEAR BET");
 		deal = new Button("DEAL");
+		reBet.setId("rebet");
+		clearBet.setId("clearBet");
+		deal.setId("deal");
 		reBet.pseudoClassStateChanged(playButtons, true);
 		clearBet.pseudoClassStateChanged(playButtons, true);
 		deal.pseudoClassStateChanged(playButtons, true);
