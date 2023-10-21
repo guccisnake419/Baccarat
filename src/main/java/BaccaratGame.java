@@ -4,6 +4,7 @@ import javafx.animation.RotateTransition;
 import javafx.animation.SequentialTransition;
 import javafx.application.Application;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -38,7 +39,12 @@ public class BaccaratGame extends Application {
 	HashMap<String, Scene> sceneMap= new HashMap<>();
 	Scene scene;
 	Button b1;
+	Button exit;
+	Button freshStart;
 	String css;
+
+	Button options;
+	Text score;
 	Stage primaryStage;
 	public double evaluateWinnings(){
 
@@ -54,13 +60,17 @@ public class BaccaratGame extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
 		this.primaryStage= primaryStage;
-		b1= new Button("Play Game");
+
 		primaryStage.setTitle("Welcome to JavaFX");
 		css = Objects.requireNonNull(this.getClass().getResource("/assets/style.css")).toExternalForm();
-		b1.setOnAction(e-> changeScene("GamePage"));
+
 		sceneMap.put("LandingPage", createLandingPage());
 		sceneMap.put("GamePage", createGamePage());
 		sceneMap.put("OptionPage", createOptionPage());
+		b1.setOnAction(e-> changeScene("GamePage"));
+		options.setOnAction(e->changeScene("OptionPage"));
+		exit.setOnAction(e-> Platform.exit());
+//		freshStart.setOnAction();
 		changeScene("LandingPage");
 
 
@@ -68,7 +78,7 @@ public class BaccaratGame extends Application {
 	}
 	public Scene createLandingPage(){
 		Text t1= new Text("Baccarat");
-
+		b1= new Button("Play Game");
 		t1.setId("t1");
 		t1.setFill(Color.web("#ffd700"));
 		VBox homeBox= new VBox(t1, b1);
@@ -89,11 +99,30 @@ public class BaccaratGame extends Application {
 		primaryStage.show();
 	}
 	public Scene createGamePage(){
-		VBox gameBox= new VBox();
+		score= new Text("$99999");
+		options = new Button("Option");
+		BorderPane header = new BorderPane();
+		header.setLeft(score);
+		header.setRight(options);
+
+		VBox gameBox= new VBox(header);
 		return new Scene(gameBox, 1200, 700);
 	}
 	public Scene createOptionPage(){
-		VBox gameBox= new VBox();
+		Text t1= new Text("Baccarat");
+		Text t2= new Text("Options");
+		exit= new Button("Exit Game");
+		freshStart= new Button("FreshStart");
+		t1.setId("t1");
+		t1.setFill(Color.web("#ffd700"));
+		VBox homeBox= new VBox(t1, t2, freshStart, exit);
+		homeBox.setSpacing(90);
+		homeBox.setAlignment(Pos.CENTER);
+		homeBox.setId("homeBox");
+		homeBox.setMaxHeight(500);
+		homeBox.setMaxWidth(500);
+		BorderPane gameBox = new BorderPane();
+		gameBox.setCenter(homeBox);
 		return new Scene(gameBox, 1200, 700);
 	}
 
