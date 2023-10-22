@@ -19,12 +19,15 @@ public class BaccaratGameLogic {
        for(var a: hand){
            total+= a.value;
        }
+       while(total>=10){
+           total= total-10;
+       }
        return total;
     }
 
     public boolean evaluateBankerDraw(ArrayList<Card> hand, Card
             playerCard){
-        int sum=hand.get(0).value+ hand.get(1).value;
+        int sum=handTotal(hand);
         if(sum>=7) return false;
         if(sum <=2) return true;
         if(sum <=6){
@@ -53,7 +56,7 @@ public class BaccaratGameLogic {
     }
 
     public boolean evaluatePlayerDraw(ArrayList<Card> hand){
-        int sum=hand.get(0).value+ hand.get(1).value;
+        int sum=handTotal(hand);
 
         return sum<=5;
     }

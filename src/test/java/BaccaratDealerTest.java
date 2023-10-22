@@ -6,6 +6,8 @@ class BaccaratDealerTest {
 
 	@Test
 	void test() {
+		BaccaratDealer B1= new BaccaratDealer();
+		B1.generateDeck();
 		fail("Not yet implemented");
 	}
 

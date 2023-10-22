@@ -77,6 +77,10 @@
 #stageHeader, #chips, #controls{
   -fx-padding: 50;
 }
+#Count{
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+}
 
 
 
