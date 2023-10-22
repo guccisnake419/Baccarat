@@ -90,6 +90,13 @@
     -fx-font-size: 20;
     -fx-font-weight: bold;
 }
+#scores{
+    -fx-font-color: GOLD;
+    -fx-font-family: "Times New Roman", Times, serif;
+    -fx-font-size: 40;
+    -fx-font-style: italic;
+    -fx-font-weight: bold;
+}
 
 
 

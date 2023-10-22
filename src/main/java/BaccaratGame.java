@@ -111,6 +111,7 @@ public class BaccaratGame extends Application {
 			clearBet.setDisable(false);
 
 		});
+//		freshStart.setOnAction(e->);
 		reBet.setOnAction(e->{
 			unMountStage();
 			playGame();
@@ -198,6 +199,8 @@ public class BaccaratGame extends Application {
 	}
 	public Scene createGamePage(){
 		score= new Text("$99999");
+		score.setId("scores");
+		score.setFill(Color.web("#ffd700"));
 		options = new Button("Option");
 
 		gamePgHeader.setLeft(score);
@@ -212,10 +215,10 @@ public class BaccaratGame extends Application {
 		initializeChips();
 		initializeControls();
 		controls.getChildren().setAll(reBet, clearBet, deal);
-		controls.setSpacing(100);
+		controls.setSpacing(75);
 
 		controls.setId("controls");
-		chips.setSpacing(30);
+		chips.setSpacing(20);
 		chips.setId("chips");
 
 		chips.getChildren().addAll(chip_100K,chip_50K, chip_40K, chip_20K, chip_10K);
@@ -461,5 +464,6 @@ public class BaccaratGame extends Application {
 		chip_20K.setDisable(true);
 		chip_10K.setDisable(true);
 		message.setText("Select a Bet First");
+
 	}
 }
