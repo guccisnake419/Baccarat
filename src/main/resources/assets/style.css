@@ -77,7 +77,16 @@
 #stageHeader, #chips, #controls, #stageFooter{
   -fx-padding: 50;
 }
+#gamePgHeader{
+    -fx-padding: 10;
+}
 #Count{
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+}
+#message{
+    -fx-background-color: #355E3B;
+    -fx-alignment: center;
     -fx-font-size: 20;
     -fx-font-weight: bold;
 }

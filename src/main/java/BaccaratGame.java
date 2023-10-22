@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -47,17 +48,22 @@ public class BaccaratGame extends Application {
 	HashMap<String, Image> playDeck= new HashMap<>();
 	PseudoClass cChips= PseudoClass.getPseudoClass("chips"), playButtons= PseudoClass.getPseudoClass("playButtons");;
 
-	Button chip_100K, chip_50K, chip_40K, chip_20K, chip_10K, options, b1, exit, freshStart, reBet, clearBet, deal;
+	Button chip_100K, chip_50K, chip_40K, chip_20K, chip_10K, options, b1, exit, freshStart, reBet, clearBet, deal
+			;
+	Button player= new Button("Player Bet"), banker=new Button("Banker Bet"), tie= new Button("Tie Bet:");
 	Text score;
 	Text playerCount= new Text(), bankerCount= new Text(), playerBet= new Text("0"), bankerBet= new Text("0"), tieBet= new Text("0");
 	Stage primaryStage;
+	TextField message= new TextField();
 	BorderPane gamePgBody= new BorderPane();
 
 	VBox chips= new VBox(), stage= new VBox(), controls= new VBox();
 	BorderPane stageHeader= makestageHeader(), stageBody1= makeBody1(),
-			stageBody2= new BorderPane(), stageFooter= makeStageFooter();
+			stageBody2= makeBody2(), stageFooter= makeStageFooter();
 	BorderPane gamePgHeader = new BorderPane();
 	VBox gameBox= new VBox(gamePgHeader, gamePgBody);
+
+	int prevBet=-1;
 	public double evaluateWinnings(){
 
 		return 0d;
@@ -76,8 +82,10 @@ public class BaccaratGame extends Application {
 		theDealer= new BaccaratDealer();
 		gameLogic= new BaccaratGameLogic();
 		theDealer.generateDeck();
+		currentBet=0;
+		totalWinnings=0;
 
-		primaryStage.setTitle("Welcome to JavaFX");
+		primaryStage.setTitle("Baccarat Game");
 		css = Objects.requireNonNull(this.getClass().getResource("/assets/style.css")).toExternalForm();
 
 		sceneMap.put("LandingPage", createLandingPage());
@@ -88,7 +96,17 @@ public class BaccaratGame extends Application {
 		deal.setOnAction(e->{
 			playGame();
 			setStageBody();
+
 			deal.setDisable(true);
+			player.setDisable(true);
+			tie.setDisable(true);
+			banker.setDisable(true);
+			chip_100K.setDisable(true);
+			chip_50K.setDisable(true);
+			chip_40K.setDisable(true);
+			chip_20K.setDisable(true);
+			chip_10K.setDisable(true);
+
 			reBet.setDisable(false);
 			clearBet.setDisable(false);
 
@@ -98,12 +116,62 @@ public class BaccaratGame extends Application {
 			playGame();
 			setStageBody();
 		});
+		clearBet.setOnAction(e->{
+			handleClearBet();
+
+		});
+
+		player.setOnAction(e->{handleBet(playerBet, 0);});
+		tie.setOnAction(e->{handleBet(tieBet, 1);});
+		banker.setOnAction(e->{handleBet(bankerBet, 2);});
+		chip_100K.setOnAction(e->handleChips(100000));
+		chip_50K.setOnAction(e->handleChips(50000));
+		chip_40K.setOnAction(e->handleChips(40000));
+		chip_20K.setOnAction(e->handleChips(20000));
+		chip_10K.setOnAction(e->handleChips(10000));
+
+
 		exit.setOnAction(e-> Platform.exit());
 //		freshStart.setOnAction();
 		changeScene("LandingPage");
 
 
 		
+	}
+	public void handleBet(Text t1, int num){
+		chip_100K.setDisable(false);
+		chip_50K.setDisable(false);
+		chip_40K.setDisable(false);
+		chip_20K.setDisable(false);
+		chip_10K.setDisable(false);
+		prevBet= num;
+	}
+
+	public void handleChips(int num){
+		int prev_bet=0;
+		if (prevBet== -1){
+			message.setText("Make Sure to Select a Bet First");
+			return;
+		}
+		if(prevBet==0){//add num to playerBet and to currentBet
+			prev_bet= Integer.valueOf(playerBet.getText());
+			playerBet.setText(String.valueOf((num+prev_bet)));
+			currentBet= currentBet+num;
+
+		} else if (prevBet==1) {//add num to tieBet and to currentBet
+			prev_bet= Integer.valueOf(tieBet.getText());
+			tieBet.setText(String.valueOf((num+prev_bet)));
+			currentBet= currentBet+num;
+
+		}else if(prevBet==2){//add num to bankerBet...
+			prev_bet= Integer.valueOf(bankerBet.getText());
+			bankerBet.setText(String.valueOf((num+prev_bet)));
+			currentBet= currentBet+num;
+		}
+		message.setText(null);
+		deal.setDisable(false);
+
+
 	}
 	public Scene createLandingPage(){
 		Text t1= new Text("Baccarat");
@@ -134,6 +202,7 @@ public class BaccaratGame extends Application {
 
 		gamePgHeader.setLeft(score);
 		gamePgHeader.setRight(options);
+		gamePgHeader.setId("gamePgHeader");
 
 		stageHeader.setId("stageHeader");
 
@@ -144,6 +213,7 @@ public class BaccaratGame extends Application {
 		initializeControls();
 		controls.getChildren().setAll(reBet, clearBet, deal);
 		controls.setSpacing(100);
+
 		controls.setId("controls");
 		chips.setSpacing(30);
 		chips.setId("chips");
@@ -154,9 +224,14 @@ public class BaccaratGame extends Application {
 		stageFooter.setId("stageFooter");
 
 		gameBox.setId("gameBox");
-//		deal.setDisable(true);
+		deal.setDisable(true);
 		reBet.setDisable(true);
 		clearBet.setDisable(true);
+		chip_100K.setDisable(true);
+		chip_50K.setDisable(true);
+		chip_40K.setDisable(true);
+		chip_20K.setDisable(true);
+		chip_10K.setDisable(true);
 		return new Scene(gameBox, 1200, 700);
 	}
 	public Scene createOptionPage(){
@@ -229,15 +304,24 @@ public class BaccaratGame extends Application {
 
 		return p1;
 	}
+	public BorderPane makeBody2(){
+		BorderPane p1= new BorderPane();
+		message.setText("Select a Bet First");
+		message.setMaxWidth(200);
+		message.setId("message");
+		message.setEditable(false);
+		p1.setCenter(message);
+		return p1;
+	}
 
 	public BorderPane makeStageFooter(){
 		BorderPane p1= new BorderPane();
-		Text player= new Text("Player Bet:");
+
 		HBox left= new HBox(player, playerBet);
 		left.setMinWidth(325);
-		Text tie= new Text("Tie Bet:");
+
 		HBox center= new HBox(tie, tieBet);
-		Text banker= new Text("Banker Bet:");
+
 		HBox right= new HBox(banker,bankerBet);
 		p1.setLeft(left);
 		p1.setCenter(center);
@@ -348,11 +432,34 @@ public class BaccaratGame extends Application {
 	}
 	public void unMountStage(){
 
+		playerCount.setText(null);
+		bankerCount.setText(null);
 		stageBody1.setRight(null);
 		stageBody1.setLeft(null);
 		stageBody2.setLeft(null);
 		stageBody2.setRight(null);
-		stageBody2.setCenter(null);
+		message.setText(null);
 
+	}
+
+	public void handleClearBet(){
+		unMountStage();
+		tie.setDisable(false);
+		player.setDisable(false);
+		banker.setDisable(false);
+		playerBet.setText("0");
+		tieBet.setText("0");
+		bankerBet.setText("0");
+		prevBet=-1;
+		currentBet=0;
+		deal.setDisable(true);
+		reBet.setDisable(true);
+		clearBet.setDisable(true);
+		chip_100K.setDisable(true);
+		chip_50K.setDisable(true);
+		chip_40K.setDisable(true);
+		chip_20K.setDisable(true);
+		chip_10K.setDisable(true);
+		message.setText("Select a Bet First");
 	}
 }
