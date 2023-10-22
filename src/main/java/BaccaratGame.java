@@ -49,13 +49,13 @@ public class BaccaratGame extends Application {
 
 	Button chip_100K, chip_50K, chip_40K, chip_20K, chip_10K, options, b1, exit, freshStart, reBet, clearBet, deal;
 	Text score;
-	Text playerCount= new Text(), bankerCount= new Text();
+	Text playerCount= new Text(), bankerCount= new Text(), playerBet= new Text("0"), bankerBet= new Text("0"), tieBet= new Text("0");
 	Stage primaryStage;
 	BorderPane gamePgBody= new BorderPane();
 
 	VBox chips= new VBox(), stage= new VBox(), controls= new VBox();
 	BorderPane stageHeader= makestageHeader(), stageBody1= makeBody1(),
-			stageBody2= new BorderPane(), stageFooter= new BorderPane();
+			stageBody2= new BorderPane(), stageFooter= makeStageFooter();
 	BorderPane gamePgHeader = new BorderPane();
 	VBox gameBox= new VBox(gamePgHeader, gamePgBody);
 	public double evaluateWinnings(){
@@ -150,9 +150,11 @@ public class BaccaratGame extends Application {
 
 		chips.getChildren().addAll(chip_100K,chip_50K, chip_40K, chip_20K, chip_10K);
 		stage.getChildren().setAll(stageHeader, stageBody1, stageBody2, stageFooter);
-
+		stageBody2.setMinHeight(200);
+		stageFooter.setId("stageFooter");
 
 		gameBox.setId("gameBox");
+//		deal.setDisable(true);
 		reBet.setDisable(true);
 		clearBet.setDisable(true);
 		return new Scene(gameBox, 1200, 700);
@@ -224,6 +226,22 @@ public class BaccaratGame extends Application {
 		deck.setFitHeight(GeneralUtil.cardLength);
 		deck.setFitWidth(GeneralUtil.cardWidth);
 		p1.setCenter(deck);
+
+		return p1;
+	}
+
+	public BorderPane makeStageFooter(){
+		BorderPane p1= new BorderPane();
+		Text player= new Text("Player Bet:");
+		HBox left= new HBox(player, playerBet);
+		left.setMinWidth(325);
+		Text tie= new Text("Tie Bet:");
+		HBox center= new HBox(tie, tieBet);
+		Text banker= new Text("Banker Bet:");
+		HBox right= new HBox(banker,bankerBet);
+		p1.setLeft(left);
+		p1.setCenter(center);
+		p1.setRight(right);
 
 		return p1;
 	}
