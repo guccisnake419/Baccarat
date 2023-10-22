@@ -1,5 +1,6 @@
 #homeBox{
     -fx-background-color:RED;
+    -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.7) , 5, 0.0 , 3, 3 );
 }
 #t1{
     -fx-font-family: "Times New Roman", Times, serif;
@@ -15,6 +16,7 @@
 #root{
     -fx-background-image: url("images/baccarattable.jpeg");
     -fx-background-size: cover;
+
 }
 .button:chips{
     -fx-text-fill: WHITE;
@@ -24,6 +26,7 @@
     -fx-min-height: 75px;
     -fx-max-width: 75px;
     -fx-max-height: 75px;
+
 }
 .button:playButtons{
     -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.7) , 5, 0.0 , 3, 3 );
@@ -66,3 +69,14 @@
     -fx-background-image: url("images/chips/red.png");
     -fx-background-size: cover;
 }
+#player, #banker{
+    -fx-font-size: 20;
+    -fx-font-style: italic;
+    -fx-font-weight: bold;
+}
+#stageHeader, #chips, #controls{
+  -fx-padding: 50;
+}
+
+
+

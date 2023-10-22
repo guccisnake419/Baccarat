@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -45,6 +46,7 @@ public class BaccaratGame extends Application {
 
 	Button chip_100K, chip_50K, chip_40K, chip_20K, chip_10K, options, b1, exit, freshStart, reBet, clearBet, deal;
 	Text score;
+	Text playerCount= new Text(), bankerCount= new Text();
 	Stage primaryStage;
 	public double evaluateWinnings(){
 
@@ -106,8 +108,12 @@ public class BaccaratGame extends Application {
 		header.setLeft(score);
 		header.setRight(options);
 		BorderPane body= new BorderPane();
-		//Vbox for stage is a temp placeholder
+
 		VBox chips= new VBox(), stage= new VBox(), controls= new VBox();
+		BorderPane stageHeader= makestageHeader(), stageBody1= makeBody1(),
+				stageBody2= new BorderPane(), stageFooter= new BorderPane();
+		stageHeader.setId("stageHeader");
+
 		body.setLeft(chips);
 		body.setCenter(stage);
 		body.setRight(controls);
@@ -115,8 +121,12 @@ public class BaccaratGame extends Application {
 		initializeControls();
 		controls.getChildren().setAll(reBet, clearBet, deal);
 		controls.setSpacing(100);
+		controls.setId("controls");
 		chips.setSpacing(30);
+		chips.setId("chips");
+
 		chips.getChildren().addAll(chip_100K,chip_50K, chip_40K, chip_20K, chip_10K);
+		stage.getChildren().setAll(stageHeader, stageBody1, stageBody2, stageFooter);
 
 		VBox gameBox= new VBox(header, body);
 		gameBox.setId("gameBox");
@@ -167,5 +177,29 @@ public class BaccaratGame extends Application {
 		reBet.pseudoClassStateChanged(playButtons, true);
 		clearBet.pseudoClassStateChanged(playButtons, true);
 		deal.pseudoClassStateChanged(playButtons, true);
+	}
+	public  BorderPane makestageHeader(){
+		BorderPane p1= new BorderPane();
+		Text player= new Text("Player:");
+		Text banker= new Text("Banker: ");
+		player.setId("player");
+		banker.setId("banker");
+
+		HBox stageHeader_left= new HBox(player,playerCount ), stageHeader_right= new HBox(banker, bankerCount);
+		p1.setLeft(stageHeader_left);
+		p1.setRight(stageHeader_right);
+		return p1;
+
+	}
+	public BorderPane makeBody1(){
+		BorderPane p1= new BorderPane();
+		ImageView deck= new ImageView();
+		deck.setImage(new Image("assets/images/deckback.png"));
+		deck.setId("deck");
+		deck.setFitHeight(175);
+		deck.setFitWidth(100);
+		p1.setCenter(deck);
+
+		return p1;
 	}
 }
