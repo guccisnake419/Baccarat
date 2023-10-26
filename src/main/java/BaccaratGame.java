@@ -385,11 +385,12 @@ public class BaccaratGame extends Application {
 
 		}
 		else{
+
 			if(gameLogic.evaluateBankerDraw(bankerHand, null))
 				bankerHand.add(theDealer.drawOne());;
 
 		}
-//		String winner=
+
 		return	gameLogic.whoWon(playerHand, bankerHand);
 
 
