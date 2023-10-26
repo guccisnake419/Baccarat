@@ -361,7 +361,11 @@ public class BaccaratGame extends Application {
 		HBox center= new HBox(tie, tieBet);
 
 		HBox right= new HBox(banker,bankerBet);
+		bankerBet.setId("bets");
+		playerBet.setId("bets");
+		tieBet.setId("bets");
 		p1.setLeft(left);
+
 		p1.setCenter(center);
 		p1.setRight(right);
 

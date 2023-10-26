@@ -26,6 +26,7 @@
     -fx-min-height: 75px;
     -fx-max-width: 75px;
     -fx-max-height: 75px;
+    -fx-font-weight: bold;
 
 }
 .button:playButtons{
@@ -36,6 +37,7 @@
     -fx-min-height: 130px;
     -fx-max-width: 130px;
     -fx-max-height: 130px;
+    -fx-font-weight: bold;
 }
 #rebet{
     -fx-background-color: BLUE;
@@ -61,6 +63,7 @@
     -fx-background-image: url("images/chips/blue.png");
     -fx-background-size: cover;
 }
+
 #chip_20K{
     -fx-background-image: url("images/chips/purple.png");
     -fx-background-size: cover;
@@ -77,6 +80,7 @@
 #stageHeader, #chips, #controls, #stageFooter{
   -fx-padding: 50;
 }
+
 #gamePgHeader{
     -fx-padding: 10;
 }
@@ -110,6 +114,11 @@
 #additionsGreater{
 
     -fx-font-size: 15;
+
+}
+#bets{
+    -fx-font-weight: bold;
+    -fx-font-size: 20;
 
 }
 
