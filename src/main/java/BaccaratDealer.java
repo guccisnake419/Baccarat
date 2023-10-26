@@ -35,6 +35,10 @@ public class BaccaratDealer {
 
     }
     public ArrayList<Card> dealHand(){
+        if(this.deckSize()<2){
+            deck.clear();
+            this.generateDeck();
+        }
         ArrayList<Card> temp= new ArrayList<>();
         temp.add(this.drawOne());
         temp.add(this.drawOne());

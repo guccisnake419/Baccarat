@@ -17,7 +17,7 @@ public class BaccaratGameLogic {
     public int handTotal(ArrayList<Card> hand){
         int total=0;
        for(var a: hand){
-           total+= a.value;
+           if(a != null) total+= a.value;
        }
        while(total>=10){
            total= total-10;
@@ -29,6 +29,9 @@ public class BaccaratGameLogic {
             playerCard){
         int sum=handTotal(hand);
         if(sum>=7) return false;
+       if(sum==0){
+           int m=0;
+       }
         if(sum <=2) return true;
         if(sum <=6){
             switch(sum){

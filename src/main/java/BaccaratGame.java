@@ -48,13 +48,12 @@ public class BaccaratGame extends Application {
 	HashMap<String, Image> playDeck= new HashMap<>();
 	PseudoClass cChips= PseudoClass.getPseudoClass("chips"), playButtons= PseudoClass.getPseudoClass("playButtons");;
 
-	Button chip_100K, chip_50K, chip_40K, chip_20K, chip_10K, options, b1, exit, freshStart, reBet, clearBet, deal
-			;
+	Button chip_100K, chip_50K, chip_40K, chip_20K, chip_10K, options, b1, exit, freshStart, reBet, clearBet, deal, backbutton;
 	Button player= new Button("Player Bet"), banker=new Button("Banker Bet"), tie= new Button("Tie Bet:");
-	Text score;
+	Text score, addition;
 	Text playerCount= new Text(), bankerCount= new Text(), playerBet= new Text("0"), bankerBet= new Text("0"), tieBet= new Text("0");
 	Stage primaryStage;
-	TextField message= new TextField();
+	TextArea message= new TextArea();
 	BorderPane gamePgBody= new BorderPane();
 
 	VBox chips= new VBox(), stage= new VBox(), controls= new VBox();
@@ -62,11 +61,31 @@ public class BaccaratGame extends Application {
 			stageBody2= makeBody2(), stageFooter= makeStageFooter();
 	BorderPane gamePgHeader = new BorderPane();
 	VBox gameBox= new VBox(gamePgHeader, gamePgBody);
-
+	String winner;
 	int prevBet=-1;
 	public double evaluateWinnings(){
+		double gains=0;
+		double loss=0;
+		switch (winner) {
+			case "Player":
+				gains = Integer.valueOf(playerBet.getText());
+				gains= gains+ gains;
+				loss= Integer.valueOf(bankerBet.getText())+ Integer.valueOf(tieBet.getText());
+				break;
+			case "Banker":
+				gains = Integer.valueOf(bankerBet.getText());
+				gains= gains+(0.95* gains);
+				loss= Integer.valueOf(playerBet.getText())+ Integer.valueOf(tieBet.getText());
+				break;
+			case "Tie":
+				gains = Integer.valueOf(tieBet.getText());
+				gains = gains+ (8* gains);
+				loss= Integer.valueOf(playerBet.getText())+ Integer.valueOf(bankerBet.getText());
+				break;
 
-		return 0d;
+		}
+
+		return gains-loss;
 	}
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -84,6 +103,9 @@ public class BaccaratGame extends Application {
 		theDealer.generateDeck();
 		currentBet=0;
 		totalWinnings=0;
+		player.setDisable(false);
+		tie.setDisable(false);
+		banker.setDisable(false);
 
 		primaryStage.setTitle("Baccarat Game");
 		css = Objects.requireNonNull(this.getClass().getResource("/assets/style.css")).toExternalForm();
@@ -94,7 +116,7 @@ public class BaccaratGame extends Application {
 		b1.setOnAction(e-> changeScene("GamePage"));
 		options.setOnAction(e->changeScene("OptionPage"));
 		deal.setOnAction(e->{
-			playGame();
+			winner = playGame();
 			setStageBody();
 
 			deal.setDisable(true);
@@ -114,7 +136,7 @@ public class BaccaratGame extends Application {
 //		freshStart.setOnAction(e->);
 		reBet.setOnAction(e->{
 			unMountStage();
-			playGame();
+			winner =playGame();
 			setStageBody();
 		});
 		clearBet.setOnAction(e->{
@@ -131,9 +153,18 @@ public class BaccaratGame extends Application {
 		chip_20K.setOnAction(e->handleChips(20000));
 		chip_10K.setOnAction(e->handleChips(10000));
 
-
+		backbutton.setOnAction(e->{
+			changeScene("GamePage");
+		});
 		exit.setOnAction(e-> Platform.exit());
-//		freshStart.setOnAction();
+		freshStart.setOnAction(e-> {
+			try {
+				resetAll();
+				start(new Stage());
+			} catch (Exception ex) {
+				throw new RuntimeException(ex);
+			}
+		});
 		changeScene("LandingPage");
 
 
@@ -171,6 +202,7 @@ public class BaccaratGame extends Application {
 		}
 		message.setText(null);
 		deal.setDisable(false);
+		clearBet.setDisable(false);
 
 
 	}
@@ -202,8 +234,10 @@ public class BaccaratGame extends Application {
 		score.setId("scores");
 		score.setFill(Color.web("#ffd700"));
 		options = new Button("Option");
-
-		gamePgHeader.setLeft(score);
+		addition= new Text();
+		HBox headerLeft= new HBox(score,addition);
+		headerLeft.setSpacing(5);
+		gamePgHeader.setLeft(headerLeft);
 		gamePgHeader.setRight(options);
 		gamePgHeader.setId("gamePgHeader");
 
@@ -242,9 +276,10 @@ public class BaccaratGame extends Application {
 		Text t2= new Text("Options");
 		exit= new Button("Exit Game");
 		freshStart= new Button("FreshStart");
+		backbutton= new Button("Go back");
 		t1.setId("t1");
 		t1.setFill(Color.web("#ffd700"));
-		VBox homeBox= new VBox(t1, t2, freshStart, exit);
+		VBox homeBox= new VBox(t1, t2,backbutton, freshStart, exit);
 		homeBox.setSpacing(90);
 		homeBox.setAlignment(Pos.CENTER);
 		homeBox.setId("homeBox");
@@ -270,7 +305,6 @@ public class BaccaratGame extends Application {
 		chip_40K.pseudoClassStateChanged(cChips, true);
 		chip_20K.pseudoClassStateChanged(cChips, true);
 		chip_10K.pseudoClassStateChanged(cChips, true);
-
 	}
 	public void initializeControls(){
 		reBet= new Button("REBET");
@@ -310,12 +344,13 @@ public class BaccaratGame extends Application {
 	public BorderPane makeBody2(){
 		BorderPane p1= new BorderPane();
 		message.setText("Select a Bet First");
-		message.setMaxWidth(200);
+		message.setMaxWidth(400);
 		message.setId("message");
 		message.setEditable(false);
 		p1.setCenter(message);
 		return p1;
 	}
+
 
 	public BorderPane makeStageFooter(){
 		BorderPane p1= new BorderPane();
@@ -333,7 +368,7 @@ public class BaccaratGame extends Application {
 		return p1;
 	}
 
-	public void playGame(){
+	public String playGame(){
 
 
 		playerHand= theDealer.dealHand();
@@ -341,13 +376,17 @@ public class BaccaratGame extends Application {
 		Boolean playerdrawthird= gameLogic.evaluatePlayerDraw(playerHand);
 		if(playerdrawthird){
 			playerHand.add(theDealer.drawOne());
-			gameLogic.evaluateBankerDraw(bankerHand, playerHand.get(2));
+			if(gameLogic.evaluateBankerDraw(bankerHand, playerHand.get(2)))
+				bankerHand.add(theDealer.drawOne());;
+
 		}
 		else{
-			gameLogic.evaluateBankerDraw(bankerHand, null);
-			bankerHand.add(theDealer.drawOne());
+			if(gameLogic.evaluateBankerDraw(bankerHand, null))
+				bankerHand.add(theDealer.drawOne());;
+
 		}
-//		String winner= gameLogic.whoWon(playerHand, bankerHand);
+//		String winner=
+		return	gameLogic.whoWon(playerHand, bankerHand);
 
 
 	}
@@ -391,7 +430,8 @@ public class BaccaratGame extends Application {
 	void setStageBody(){//makes edits to the stage body
 		ImageView playerCard1= new ImageView();
 		ImageView playerCard2= new ImageView();
-		ImageView playerCard3;
+		ImageView playerCard3= new ImageView();
+		playerCard3.setImage(null);
 		playerCard1.setImage(playDeck.get(playerHand.get(0).suite));
 		playerCard2.setImage(playDeck.get(playerHand.get(1).suite));
 		playerCard1.setFitHeight(GeneralUtil.cardLength);
@@ -402,7 +442,8 @@ public class BaccaratGame extends Application {
 		pHand.setSpacing(5);
 		ImageView bankerCard1= new ImageView();
 		ImageView bankerCard2= new ImageView();
-		ImageView bankerCard3;
+		ImageView bankerCard3= new ImageView();
+		bankerCard3.setImage(null);
 		bankerCard1.setImage(playDeck.get(bankerHand.get(0).suite));
 		bankerCard2.setImage(playDeck.get(bankerHand.get(1).suite));
 		bankerCard1.setFitHeight(GeneralUtil.cardLength);
@@ -413,24 +454,64 @@ public class BaccaratGame extends Application {
 		pHand2.setSpacing(5);
 		stageBody1.setLeft(pHand);
 		stageBody1.setRight(pHand2);
-		if(playerHand.size()>2){
+		if(playerHand.size()>2 && playerHand.get(2)!= null){
 			playerCard3= new ImageView(playDeck.get(playerHand.get(2).suite));
-			playerCard3.setFitHeight(GeneralUtil.cardLength);
-			playerCard3.setFitWidth(GeneralUtil.cardWidth);
-			stageBody2.setLeft(playerCard3);
+
 		}
-		if(bankerHand.size()>2){
+		if(bankerHand.size()>2 && bankerHand.get(2) != null){
+
 			bankerCard3= new ImageView(playDeck.get(bankerHand.get(2).suite));
-			bankerCard3.setFitHeight(GeneralUtil.cardLength);
-			bankerCard3.setFitWidth(GeneralUtil.cardWidth);
-			stageBody2.setRight(bankerCard3);
+
 		}
+		playerCard3.setFitHeight(GeneralUtil.cardLength);
+		playerCard3.setFitWidth(GeneralUtil.cardWidth);
+		stageBody2.setLeft(playerCard3);
+		bankerCard3.setFitHeight(GeneralUtil.cardLength);
+		bankerCard3.setFitWidth(GeneralUtil.cardWidth);
+		stageBody2.setRight(bankerCard3);
+
 		playerCount.setId("Count");
 		bankerCount.setId("Count");
+
 		playerCount.setText(String.format("%d", gameLogic.handTotal(playerHand)));
 		bankerCount.setText(String.format("%d", gameLogic.handTotal(bankerHand)));
+		String winMessage;
+		if(winner== "Player"){
+			winMessage= "Player Wins";
+		}
+		else if(winner=="Banker"){
+			winMessage= "Banker Wins";
+		}
+		else {
+			winMessage= "Tie";
+		}
+		message.setText(String.format("Player Total: %s Banker Total: %s\n%s\n",playerCount.getText(),bankerCount.getText(), winMessage));
+		String sStr= score.getText();
+		double nScore=0d;
+		double winnings= evaluateWinnings();
+		sStr= sStr.replace("$","");
+		if(sStr.contains("-")){
+			sStr= sStr.replace("-", "");
+			nScore= Integer.parseInt(sStr)*-1 + winnings;
 
+		}else nScore= Integer.parseInt(sStr)+ winnings;
+		if(nScore<0){
+			score.setText(String.format("-$%d", (int)nScore *(-1)));
+		}
+		else score.setText(String.format("$%d", (int)nScore));
+		addition.setId("additionsGreater");
 
+		if(winnings>0){
+			addition.setText(String.format("+%d", (int)winnings));
+
+			addition.setFill(Color.web("#00ff00"));
+
+		}
+		else {
+			addition.setText(String.format("%d", (int)winnings));
+			addition.setFill(Color.web("#ff0000"));
+
+		}
 
 	}
 	public void unMountStage(){
@@ -465,5 +546,31 @@ public class BaccaratGame extends Application {
 		chip_10K.setDisable(true);
 		message.setText("Select a Bet First");
 
+	}
+	public void resetAll(){
+//		playerHand=null;
+//		bankerHand=null;
+//		theDealer= null;
+//		theDealer= null;
+//		gameLogic= null;
+//		currentBet= 0d;
+//		totalWinnings= 0d;
+		sceneMap= new HashMap<>();
+		scene= null;
+		css= null;
+		playDeck= new HashMap<>();
+		playerCount= new Text();
+		bankerCount= new Text();
+		playerBet= new Text("0");
+		bankerBet= new Text("0");
+		tieBet= new Text("0");
+		message= new TextArea();
+		gamePgBody= new BorderPane();
+		chips= new VBox(); stage= new VBox(); controls= new VBox();
+		stageHeader= makestageHeader(); stageBody1= makeBody1();
+		stageBody2= makeBody2(); stageFooter= makeStageFooter();
+		gamePgHeader = new BorderPane();
+		gameBox= new VBox(gamePgHeader, gamePgBody);
+		prevBet=-1;
 	}
 }

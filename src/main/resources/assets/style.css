@@ -85,10 +85,20 @@
     -fx-font-weight: bold;
 }
 #message{
-    -fx-background-color: #355E3B;
+
     -fx-alignment: center;
     -fx-font-size: 20;
     -fx-font-weight: bold;
+    -fx-control-inner-background:#355E3B;
+     -fx-font-family: Consolas;
+    -fx-highlight-fill: #00ff00;
+     -fx-highlight-text-fill: #000000;
+     -fx-text-fill: #00ff00;
+
+
+}
+#message *.text {
+    -fx-text-alignment: center;
 }
 #scores{
     -fx-font-color: GOLD;
@@ -96,6 +106,11 @@
     -fx-font-size: 40;
     -fx-font-style: italic;
     -fx-font-weight: bold;
+}
+#additionsGreater{
+
+    -fx-font-size: 15;
+
 }
 
 
