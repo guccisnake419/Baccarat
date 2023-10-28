@@ -5,6 +5,9 @@ public class BaccaratDealer {
     ArrayList<Card> deck;
 
     public void generateDeck(){
+        if(deck != null){
+            deck.clear();
+        }
         deck= new ArrayList<>();
         String suites[]= {"spades", "diamonds", "hearts", "clubs"};
         for(int i=2; i<10; i++) {//adding the numbered cards
@@ -35,10 +38,10 @@ public class BaccaratDealer {
 
     }
     public ArrayList<Card> dealHand(){
-        if(this.deckSize()<2){
-            deck.clear();
-            this.generateDeck();
-        }
+//        if(this.deckSize()<2){
+//            deck.clear();
+//            this.generateDeck();
+//        }
         ArrayList<Card> temp= new ArrayList<>();
         temp.add(this.drawOne());
         temp.add(this.drawOne());

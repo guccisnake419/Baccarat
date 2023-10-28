@@ -170,6 +170,7 @@ public class BaccaratGame extends Application {
 		
 	}
 	public void handleBet(Text t1, int num){
+		message.setText("Select an Amount");
 		chip_100K.setDisable(false);
 		chip_50K.setDisable(false);
 		chip_40K.setDisable(false);
@@ -184,24 +185,32 @@ public class BaccaratGame extends Application {
 			message.setText("Make Sure to Select a Bet First");
 			return;
 		}
+
 		if(prevBet==0){//add num to playerBet and to currentBet
 			prev_bet= Integer.valueOf(playerBet.getText());
 			playerBet.setText(String.valueOf((num+prev_bet)));
 			currentBet= currentBet+num;
 
+			tie.setDisable(true);
+			banker.setDisable(true);
 		} else if (prevBet==1) {//add num to tieBet and to currentBet
 			prev_bet= Integer.valueOf(tieBet.getText());
 			tieBet.setText(String.valueOf((num+prev_bet)));
 			currentBet= currentBet+num;
+			player.setDisable(true);
+			banker.setDisable(true);
 
 		}else if(prevBet==2){//add num to bankerBet...
 			prev_bet= Integer.valueOf(bankerBet.getText());
 			bankerBet.setText(String.valueOf((num+prev_bet)));
 			currentBet= currentBet+num;
+			player.setDisable(true);
+			tie.setDisable(true);
 		}
 		message.setText(null);
 		deal.setDisable(false);
 		clearBet.setDisable(false);
+		message.setText("Click Deal to Start");
 
 
 	}
@@ -373,7 +382,7 @@ public class BaccaratGame extends Application {
 
 	public String playGame(){
 
-
+		if(theDealer.deckSize()<6) theDealer.generateDeck();
 		playerHand= theDealer.dealHand();
 		bankerHand= theDealer.dealHand();
 		if(gameLogic.handTotal(playerHand)==8 ||gameLogic.handTotal(playerHand)==9||gameLogic.handTotal(bankerHand)==8 ||gameLogic.handTotal(bankerHand)==9){
