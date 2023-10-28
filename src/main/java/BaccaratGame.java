@@ -69,17 +69,16 @@ public class BaccaratGame extends Application {
 		switch (winner) {
 			case "Player":
 				gains = Integer.valueOf(playerBet.getText());
-				gains= gains+ gains;
 				loss= Integer.valueOf(bankerBet.getText())+ Integer.valueOf(tieBet.getText());
 				break;
 			case "Banker":
 				gains = Integer.valueOf(bankerBet.getText());
-				gains= gains+(0.95* gains);
+				gains= (0.95* gains);
 				loss= Integer.valueOf(playerBet.getText())+ Integer.valueOf(tieBet.getText());
 				break;
 			case "Tie":
 				gains = Integer.valueOf(tieBet.getText());
-				gains = gains+ (8* gains);
+				gains = (8* gains);
 				loss= Integer.valueOf(playerBet.getText())+ Integer.valueOf(bankerBet.getText());
 				break;
 
@@ -377,6 +376,9 @@ public class BaccaratGame extends Application {
 
 		playerHand= theDealer.dealHand();
 		bankerHand= theDealer.dealHand();
+		if(gameLogic.handTotal(playerHand)==8 ||gameLogic.handTotal(playerHand)==9||gameLogic.handTotal(bankerHand)==8 ||gameLogic.handTotal(bankerHand)==9){
+			return	gameLogic.whoWon(playerHand, bankerHand);
+		}
 		Boolean playerdrawthird= gameLogic.evaluatePlayerDraw(playerHand);
 		if(playerdrawthird){
 			playerHand.add(theDealer.drawOne());
@@ -459,7 +461,12 @@ public class BaccaratGame extends Application {
 		pHand2.setSpacing(5);
 		stageBody1.setLeft(pHand);
 		stageBody1.setRight(pHand2);
+
 		if(playerHand.size()>2 && playerHand.get(2)!= null){
+//			PauseTransition pause = new PauseTransition(Duration.seconds(1));
+//			pause.setOnFinished(event ->
+//					label.setText("Finished: 1 second elapsed");
+//);
 			playerCard3= new ImageView(playDeck.get(playerHand.get(2).suite));
 
 		}
@@ -470,11 +477,77 @@ public class BaccaratGame extends Application {
 		}
 		playerCard3.setFitHeight(GeneralUtil.cardLength);
 		playerCard3.setFitWidth(GeneralUtil.cardWidth);
-		stageBody2.setLeft(playerCard3);
 		bankerCard3.setFitHeight(GeneralUtil.cardLength);
 		bankerCard3.setFitWidth(GeneralUtil.cardWidth);
-		stageBody2.setRight(bankerCard3);
+		if(playerCard3.getImage()!= null|| bankerCard3.getImage()!= null){
+			PauseTransition pause= new PauseTransition(Duration.seconds(1));
+			ImageView finalPlayerCard = playerCard3;
+			ImageView finalBankerCard = bankerCard3;
+			pause.setOnFinished(e->{
+				thirdcardfun(finalPlayerCard, finalBankerCard);
+			});
 
+
+			pause.play();
+			return;
+		}
+
+
+		stageBody2.setLeft(playerCard3);
+
+		stageBody2.setRight(bankerCard3);
+		playerCount.setId("Count");
+		bankerCount.setId("Count");
+
+		playerCount.setText(String.format("%d", gameLogic.handTotal(playerHand)));
+		bankerCount.setText(String.format("%d", gameLogic.handTotal(bankerHand)));
+		String winMessage;
+		if(winner== "Player"){
+			winMessage= "Player Wins";
+		}
+		else if(winner=="Banker"){
+			winMessage= "Banker Wins";
+		}
+		else {
+			winMessage= "Tie";
+		}
+		message.setText(String.format("Player Total: %s Banker Total: %s\n%s\n",playerCount.getText(),bankerCount.getText(), winMessage));
+		String sStr= score.getText();
+		double nScore=0d;
+		double winnings= evaluateWinnings();
+		sStr= sStr.replace("$","");
+		if(sStr.contains("-")){
+			sStr= sStr.replace("-", "");
+			nScore= Integer.parseInt(sStr)*-1 + winnings;
+
+		}else nScore= Integer.parseInt(sStr)+ winnings;
+		if(nScore<0){
+			score.setText(String.format("-$%d", (int)nScore *(-1)));
+		}
+		else score.setText(String.format("$%d", (int)nScore));
+		addition.setId("additionsGreater");
+
+		if(winnings>0){
+			addition.setText(String.format("+%d", (int)winnings));
+
+			addition.setFill(Color.web("#00ff00"));
+
+		}
+		else {
+			addition.setText(String.format("%d", (int)winnings));
+			addition.setFill(Color.web("#ff0000"));
+
+		}
+
+	}
+	public void thirdcardfun(ImageView playerCard3, ImageView bankerCard3){
+
+		stageBody2.setLeft(playerCard3);
+
+		stageBody2.setRight(bankerCard3);
+		stageBody2.setLeft(playerCard3);
+
+		stageBody2.setRight(bankerCard3);
 		playerCount.setId("Count");
 		bankerCount.setId("Count");
 
@@ -528,6 +601,7 @@ public class BaccaratGame extends Application {
 		stageBody2.setLeft(null);
 		stageBody2.setRight(null);
 		message.setText(null);
+		addition.setText(null);
 
 	}
 
