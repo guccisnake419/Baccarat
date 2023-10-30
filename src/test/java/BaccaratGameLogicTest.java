@@ -7,7 +7,18 @@ import java.util.ArrayList;
 
 
 
+
+
 class BaccaratGameLogicTest {
+
+    @Test
+    void cardConstructorTest(){
+        Card card = new Card("Hearts", 10);
+
+        assertEquals("Hearts", card.suite);
+        assertEquals(10, card.value);
+    }
+
      @Test
      void evaluateBankerDrawTest(){
          ArrayList<Card>hand=new ArrayList<>();
