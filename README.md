@@ -3,6 +3,7 @@ My Implementing of the Baccarat Game using JavaFX Library
 
 
 # Execute 
+[Download Baccarat JAR](https://github.com/guccisnake419/Baccarat/releases/download/v1.0/Baccarat.jar)
 
 ```angular2html
 java -jar Baccarat.jar
